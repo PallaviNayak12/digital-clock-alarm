@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Clock & Alarm</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 350px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    #clock {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    input {
+      width: 150px;
+      text-align: center;
+    }
+    button {
+      background: #00c853;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #009624;
+    }
+    .message {
+      margin-top: 15px;
+      font-size: 18px;
+      color: #ffeb3b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>⏰ Digital Clock & Alarm</h2>
+    <div id="clock">00:00:00</div>
+    <input type="time" id="alarmTime">
+    <button onclick="setAlarm()">Set Alarm</button>
+    <button onclick="clearAlarm()">Clear Alarm</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    let alarmTime = null;
+    let alarmTimeout = null;
+
+    function updateClock() {
+      const now = new Date();
+      let h = String(now.getHours()).padStart(2, '0');
+      let m = String(now.getMinutes()).padStart(2, '0');
+      let s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById("clock").textContent = `${h}:${m}:${s}`;
+
+      // Check alarm
+      if (alarmTime === `${h}:${m}`) {
+        document.getElementById("message").textContent = "⏰ Wake up! Alarm ringing!";
+        playSound();
+      }
+    }
+
+    function setAlarm() {
+      const input = document.getElementById("alarmTime").value;
+      if (!input) {
+        alert("Please select a time first!");
+        return;
+      }
+      alarmTime = input;
+      document.getElementById("message").textContent = `✅ Alarm set for ${alarmTime}`;
+    }
+
+    function clearAlarm() {
+      alarmTime = null;
+      document.getElementById("message").textContent = "❌ Alarm cleared";
+    }
+
+    function playSound() {
+      const audio = new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg");
+      audio.play();
+    }
+
+    // Update clock every second
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>
